@@ -30,32 +30,23 @@ function Footer() {
             <h3 className="text-xl font-bold mb-3">Group Companies</h3>
             <ul>
               <li className="mb-2">
-                <a href="#" className="hover:underline">Westside</a>
+                <a href="https://www.westside.com/?utm_source=google&utm_medium=cpc&utm_campaign=WES_Search_Brand&gad_source=1&gclid=Cj0KCQjwvb-zBhCmARIsAAfUI2tGqsMsqaGaBnvfJIj0DdiIzGe9mQbCHEMPDTNz8Hb4J1UFX_OraBoaApROEALw_wcB" className="hover:underline">Westside</a>
               </li>
               <li className="mb-2">
-                <a href="#" className="hover:underline">H&M</a>
+                <a href="https://www2.hm.com/en_in/index.html" className="hover:underline">H&M</a>
               </li>
               <li className="mb-2">
-                <a href="#" className="hover:underline">ZARA</a>
+                <a href="https://www.zara.com/in/" className="hover:underline">ZARA</a>
               </li>
             </ul>
           </div>
 
           {/* Column 3 */}
           <div className="mb-4">
-            <h3 className="text-xl font-bold mb-3">Support</h3>
+            <h3 className="text-xl font-bold mb-3">Call Us</h3>
             <ul>
               <li className="mb-2">
-                <a href="#" className="hover:underline">Help Center</a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="hover:underline">Contact Us</a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="hover:underline">Status</a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">Documentation</a>
+                +91 6289610912
               </li>
             </ul>
           </div>
@@ -64,13 +55,13 @@ function Footer() {
           <div className="mb-4 flex flex-col items-center">
             <h3 className="text-xl font-bold mb-3">Follow Us</h3>
             <div className="flex space-x-4">
-              <a href="#" className="text-white hover:text-gray-400">
+              <a href="https://www.facebook.com/people/Abhishek-Srivastava/pfbid037FWoTUksCn7cQ1oYaLWAreMWipXTEXFcyegvhLykTWotBeMCr5uedbcMCGUHxj88l/?mibextid=kFxxJD" className="text-white hover:text-gray-400">
                 <FaFacebook size={24} />
               </a>
-              <a href="#" className="text-white hover:text-gray-400">
+              <a href="https://www.instagram.com/iamabhishek_24/?utm_source=qr&igsh=Y2d1MndkaTlkOWlj" className="text-white hover:text-gray-400">
                 <FaInstagram size={24} />
               </a>
-              <a href="#" className="text-white hover:text-gray-400">
+              <a href="https://www.linkedin.com/in/abhishek-srivastava-9162b61b6?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" className="text-white hover:text-gray-400">
                 <FaLinkedin size={24} />
               </a>
             </div>
