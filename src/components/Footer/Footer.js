@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 function Footer() {
   return (
@@ -11,16 +11,16 @@ function Footer() {
             <h3 className="text-xl font-bold mb-3">Company</h3>
             <ul>
               <li className="mb-2">
-                <a href="#" className="hover:underline">About Us</a>
+                <a href="/" className="hover:underline">About Us</a>
               </li>
               <li className="mb-2">
-                <a href="#" className="hover:underline">Careers</a>
+                <a href="/" className="hover:underline">Careers</a>
               </li>
               <li className="mb-2">
-                <a href="#" className="hover:underline">Press</a>
+                <a href="/" className="hover:underline">Press</a>
               </li>
               <li>
-                <a href="#" className="hover:underline">Blog</a>
+                <a href="/" className="hover:underline">Blog</a>
               </li>
             </ul>
           </div>

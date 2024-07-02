@@ -1,5 +1,7 @@
 import React from "react";
 import { SearchIcon, UserIcon } from "@heroicons/react/solid";
+import { NavLink } from "react-router-dom";
+import "./NavBar.css";
 
 function NavBar() {
   return (
@@ -22,16 +24,24 @@ function NavBar() {
         <div className="flex  mt-4 justify-between flex-wrap ml-4 ">
           <ul className="flex space-x-2 lg:space-x-20">
             <li className="font-bold cursor-pointer hover:font-thin sm:text-base text-xs">
-              Home
+              <NavLink to="/" activeclassname="active">
+                Home
+              </NavLink>
             </li>
             <li className="font-bold cursor-pointer hover:font-thin sm:text-base text-xs">
-              About
+              <NavLink to="/about" activeclassname="active">
+                About
+              </NavLink>
             </li>
             <li className="font-bold cursor-pointer hover:font-thin sm:text-base text-xs">
-              Products
+              <NavLink to="/products" activeclassname="active">
+                Products
+              </NavLink>
             </li>
             <li className="font-bold cursor-pointer hover:font-thin sm:text-base text-xs">
-              Contacts
+              <NavLink to="/contact" activeclassname="active">
+                Contact
+              </NavLink>
             </li>
           </ul>
           <ul className="flex-wrap hidden sm:flex ">

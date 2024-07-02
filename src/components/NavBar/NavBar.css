@@ -1,0 +1,5 @@
+/* adding style for active link of Navbar */
+.active{
+   border-bottom: 2px solid black;
+   border-radius: 10%;
+}
