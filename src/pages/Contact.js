@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
+import TextField from "@mui/material/TextField";
 
 function Contact() {
   return (
@@ -18,93 +19,144 @@ export default Contact;
 export function Detail() {
   // Initially all input elements of the below form are empty
   const initialvalue = {
-    name:"",
-    email:"",
-    message:""
-  }
+    name: "",
+    email: "",
+    message: "",
+  };
+  // Initial state for all error will be false for validation
+  const initialErrorValue = {
+    nameMissing: false,
+    emailMissing: false,
+    messageMissing: false,
+    allMissing: false, // for all input field are missing
+    emailInvalid: false,
+  };
 
   // The reducer method used to handle states of three input element name, email and message.
   const stateReducer = (state, action) => {
     switch (action.type) {
       case "name":
-        return {...state,name:action.payload}
+        return { ...state, name: action.payload };
       case "email":
-        return {...state,email:action.payload}
+        return { ...state, email: action.payload };
       case "message":
-        return {...state,message:action.payload}
+        return { ...state, message: action.payload };
       default:
         return state;
     }
   };
+  // Below Reducer function is getting use for seeting state for error input filed in Validation
+  const errorStateReducer = (errorState, action) => {
+    switch (action.type) {
+      case "nameMissing":
+        return { ...errorState, nameMissing: action.payload };
+      case "emailMissing":
+        return { ...errorState, emailMissing: action.payload };
+      case "messageMissing":
+        return { ...errorState, messageMissing: action.payload };
+      case "allMissing":
+        return { ...errorState, allMissing: action.payload };
+      case "emailInvalid":
+        return { ...errorState, emailInvalid: action.payload };
+      default:
+        return errorState;
+    }
+  };
   const [state, dispatch] = useReducer(stateReducer, initialvalue);
+  // following uereducer hook is gettting used for storing error state for different input field to implement validation
+  const [errorState, dispatchValidation] = useReducer(
+    errorStateReducer,
+    initialErrorValue
+  );
+
+  // Before submitting the form we are checking all the inputs are valid or not.
+  const formValidation = (e) => {
+    e.preventDefault();
+    if (!state.name && !state.email && !state.message) {
+      dispatchValidation({ type: "allMissing", payload: true });
+    } else if (!state.name || !state.email || !state.message) {
+      if (!state.name) {
+        dispatchValidation({ type: "nameMissing", payload: true });
+      } else if (!state.email) {
+        dispatchValidation({ type: "emailMissing", payload: true });
+      } else {
+        dispatchValidation({ type: "messageMissing", payload: true });
+      }
+    } else if (!state.email.endsWith("@gmail.com")) {
+      dispatchValidation({ type: "emailInvalid", payload: true });
+    }
+  };
 
   return (
-    <section class="text-gray-600 body-font relative">
-      <div class="container px-5 py-24 mx-auto">
-        <div class="flex flex-col text-center w-full mb-12">
-          <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
+    <section className="text-gray-600 body-font relative">
+      <div className="container px-5 py-24 mx-auto">
+        <div className="flex flex-col text-center w-full mb-12">
+          <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
             Contact Us
           </h1>
-          <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
+          <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
             To better assist you, contact us by providing the necessary
             information below. Then, tap or click "Send Question" to contact us.
           </p>
         </div>
         <form>
-          <div class="lg:w-1/2 md:w-2/3 mx-auto">
-            <div class="flex flex-wrap -m-2">
-              <div class="p-2 w-1/2">
-                <div class="relative">
-                  <label for="name" class="leading-7 text-sm text-gray-600">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+          <div className="lg:w-1/2 md:w-2/3 mx-auto">
+            <div className="flex flex-wrap -m-2">
+              <div className="p-2 w-1/2">
+                <div className="relative">
+                  <TextField
+                    id="outlined-basic"
+                    label={errorState.nameMissing ?"Error" : "message"}
+                    variant="outlined"
+                    fullWidth
                     onChange={(e) => {
-                      dispatch({ type: "name", payload:e.target.value });
+                      dispatch({ type: "name", payload: e.target.value });
                     }}
                     value={state.name}
+                    placeholder="John markrem"
+                    error={errorState.allMissing || errorState.nameMissing}
                   />
                 </div>
               </div>
-              <div class="p-2 w-1/2">
-                <div class="relative">
-                  <label for="email" class="leading-7 text-sm text-gray-600">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              <div className="p-2 w-1/2">
+                <div className="relative">
+                  <TextField
+                    id="outlined-basic"
+                    label={errorState.emailMissing ? "Error" : "Email"}
+                    variant="outlined"
+                    fullWidth
                     onChange={(e) => {
-                      dispatch({ type: "email", payload:e.target.value});
+                      dispatch({ type: "email", payload: e.target.value });
                     }}
                     value={state.email}
+                    placeholder="John@gmail.com"
+                    error={errorState.allMissing ||errorState.emailMissing || errorState.emailInvalid}
                   />
                 </div>
               </div>
-              <div class="p-2 w-full">
-                <div class="relative">
-                  <label for="message" class="leading-7 text-sm text-gray-600">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+              <div className="p-2 w-full">
+                <div className="relative">
+                  <TextField
+                    id="outlined-basic"
+                    label={errorState.messageMissing ?"Error" : "message"}
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    rows={4}
                     onChange={(e) => {
-                      dispatch({ type: "message", payload:e.target.value });
+                      dispatch({ type: "message", payload: e.target.value });
                     }}
                     value={state.message}
-                  ></textarea>
+                    placeholder="Enter our concern here."
+                    error={errorState.allMissing||errorState.messageMissing}
+                  />
                 </div>
               </div>
-              <div class="p-2 w-full">
-                <button class="flex mx-auto text-white bg-slate-900	 border-0 py-2 px-8 focus:outline-none hover:bg-slate-600 rounded text-lg">
+              <div className="p-2 w-full">
+                <button
+                  className="flex mx-auto text-white bg-slate-900	 border-0 py-2 px-8 focus:outline-none hover:bg-slate-600 rounded text-lg"
+                  onClick={(e)=>formValidation(e)}
+                >
                   Send Question
                 </button>
               </div>
