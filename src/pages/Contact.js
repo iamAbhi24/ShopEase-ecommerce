@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import TextField from "@mui/material/TextField";
@@ -23,14 +23,29 @@ export function Detail() {
     email: "",
     message: "",
   };
-  // Initial state for all error will be false for validation
-  const initialErrorValue = {
-    nameMissing: false,
-    emailMissing: false,
-    messageMissing: false,
-    allMissing: false, // for all input field are missing
-    emailInvalid: false,
+
+  const [submit, setSubmit] = useState(false);
+  const handleSubmit=(e)=>{
+    if(!formValidation()){
+      e.preventDefault();
+    }
+  }
+  const formValidation = () => {
+    if ((!state.name || !state.email || !state.message)||(!(/^[a-z].*@gmail\.com$/.test(state.email.toLowerCase())))) {
+      setSubmit(true);
+      return false;
+    }
+    else
+    return true;
   };
+  // Initial state for all error will be false for validation
+  // const initialErrorValue = {
+  //   nameMissing: false,
+  //   emailMissing: false,
+  //   messageMissing: false,
+  //   allMissing: false, // for all input field are missing
+  //   emailInvalid: false,
+  // };
 
   // The reducer method used to handle states of three input element name, email and message.
   const stateReducer = (state, action) => {
@@ -46,46 +61,46 @@ export function Detail() {
     }
   };
   // Below Reducer function is getting use for seeting state for error input filed in Validation
-  const errorStateReducer = (errorState, action) => {
-    switch (action.type) {
-      case "nameMissing":
-        return { ...errorState, nameMissing: action.payload };
-      case "emailMissing":
-        return { ...errorState, emailMissing: action.payload };
-      case "messageMissing":
-        return { ...errorState, messageMissing: action.payload };
-      case "allMissing":
-        return { ...errorState, allMissing: action.payload };
-      case "emailInvalid":
-        return { ...errorState, emailInvalid: action.payload };
-      default:
-        return errorState;
-    }
-  };
+  // const errorStateReducer = (errorState, action) => {
+  //   switch (action.type) {
+  //     case "nameMissing":
+  //       return { ...errorState, nameMissing: action.payload };
+  //     case "emailMissing":
+  //       return { ...errorState, emailMissing: action.payload };
+  //     case "messageMissing":
+  //       return { ...errorState, messageMissing: action.payload };
+  //     case "allMissing":
+  //       return { ...errorState, allMissing: action.payload };
+  //     case "emailInvalid":
+  //       return { ...errorState, emailInvalid: action.payload };
+  //     default:
+  //       return errorState;
+  //   }
+  // };
   const [state, dispatch] = useReducer(stateReducer, initialvalue);
   // following uereducer hook is gettting used for storing error state for different input field to implement validation
-  const [errorState, dispatchValidation] = useReducer(
-    errorStateReducer,
-    initialErrorValue
-  );
+  // const [errorState, dispatchValidation] = useReducer(
+  //   errorStateReducer,
+  //   initialErrorValue
+  // );
 
   // Before submitting the form we are checking all the inputs are valid or not.
-  const formValidation = (e) => {
-    e.preventDefault();
-    if (!state.name && !state.email && !state.message) {
-      dispatchValidation({ type: "allMissing", payload: true });
-    } else if (!state.name || !state.email || !state.message) {
-      if (!state.name) {
-        dispatchValidation({ type: "nameMissing", payload: true });
-      } else if (!state.email) {
-        dispatchValidation({ type: "emailMissing", payload: true });
-      } else {
-        dispatchValidation({ type: "messageMissing", payload: true });
-      }
-    } else if (!state.email.endsWith("@gmail.com")) {
-      dispatchValidation({ type: "emailInvalid", payload: true });
-    }
-  };
+  // const formValidation = (e) => {
+  //   e.preventDefault();
+  //   if (!state.name && !state.email && !state.message) {
+  //     dispatchValidation({ type: "allMissing", payload: true });
+  //   } else if (!state.name || !state.email || !state.message) {
+  //     if (!state.name) {
+  //       dispatchValidation({ type: "nameMissing", payload: true });
+  //     } else if (!state.email) {
+  //       dispatchValidation({ type: "emailMissing", payload: true });
+  //     } else {
+  //       dispatchValidation({ type: "messageMissing", payload: true });
+  //     }
+  //   } else if (!state.email.endsWith("@gmail.com")) {
+  //     dispatchValidation({ type: "emailInvalid", payload: true });
+  //   }
+  // };
 
   return (
     <section className="text-gray-600 body-font relative">
@@ -99,14 +114,14 @@ export function Detail() {
             information below. Then, tap or click "Send Question" to contact us.
           </p>
         </div>
-        <form>
+        <form onSubmit={(e)=>{handleSubmit(e)}}>
           <div className="lg:w-1/2 md:w-2/3 mx-auto">
             <div className="flex flex-wrap -m-2">
               <div className="p-2 w-1/2">
                 <div className="relative">
                   <TextField
                     id="outlined-basic"
-                    label={errorState.nameMissing ?"Error" : "message"}
+                    label="Name"
                     variant="outlined"
                     fullWidth
                     onChange={(e) => {
@@ -114,7 +129,8 @@ export function Detail() {
                     }}
                     value={state.name}
                     placeholder="John markrem"
-                    error={errorState.allMissing || errorState.nameMissing}
+                    error={(!state.name && submit) && submit}
+                    helperText={(!state.name && submit)?"Enter Name":""}
                   />
                 </div>
               </div>
@@ -122,7 +138,7 @@ export function Detail() {
                 <div className="relative">
                   <TextField
                     id="outlined-basic"
-                    label={errorState.emailMissing ? "Error" : "Email"}
+                    label={"Email"}
                     variant="outlined"
                     fullWidth
                     onChange={(e) => {
@@ -130,7 +146,8 @@ export function Detail() {
                     }}
                     value={state.email}
                     placeholder="John@gmail.com"
-                    error={errorState.allMissing ||errorState.emailMissing || errorState.emailInvalid}
+                    error={(!state.email && submit) ? true:((state.email && submit)?true:"")}
+                    helperText={(!state.email && submit)?"Enter Email":((state.email && submit) ? "Invalid Email":"")}
                   />
                 </div>
               </div>
@@ -138,7 +155,7 @@ export function Detail() {
                 <div className="relative">
                   <TextField
                     id="outlined-basic"
-                    label={errorState.messageMissing ?"Error" : "message"}
+                    label="message"
                     variant="outlined"
                     fullWidth
                     multiline
@@ -148,14 +165,15 @@ export function Detail() {
                     }}
                     value={state.message}
                     placeholder="Enter our concern here."
-                    error={errorState.allMissing||errorState.messageMissing}
+                    error={(!state.message && submit) && submit}
+                    helperText={(!state.message && submit)?"Enter Message":""}
                   />
                 </div>
               </div>
               <div className="p-2 w-full">
                 <button
                   className="flex mx-auto text-white bg-slate-900	 border-0 py-2 px-8 focus:outline-none hover:bg-slate-600 rounded text-lg"
-                  onClick={(e)=>formValidation(e)}
+                  // onClick={(e)=>formValidation(e)}
                 >
                   Send Question
                 </button>
