@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from "react";
+import emailjs from "@emailjs/browser";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import TextField from "@mui/material/TextField";
@@ -25,27 +26,42 @@ export function Detail() {
   };
 
   const [submit, setSubmit] = useState(false);
-  const handleSubmit=(e)=>{
-    if(!formValidation()){
-      e.preventDefault();
+  // Before submitting the form we are checking all the inputs are valid or not.
+  const handleSubmit = (e) => {
+     e.preventDefault();
+    if (formValidation()) {
+    const emailParams = {
+      subject: "concern",
+      name: state.name,
+      message: state.message,
+      email: state.email,
+    };
+    emailjs
+      .send("service_uy5112s", "contact_form", emailParams, {
+        publicKey: "ZTlmKDsuZ4Q7d4b3s",
+      })
+      .then((response) => {
+        alert(response.text);
+      })
+      .catch((error) => {
+        alert(error);
+      })
+      .finally(()=>{
+        dispatch({type:"reset"})
+      })
     }
-  }
+  };
   const formValidation = () => {
-    if ((!state.name || !state.email || !state.message)||(!(/^[a-z].*@gmail\.com$/.test(state.email.toLowerCase())))) {
+    if (
+      !state.name ||
+      !state.email ||
+      !state.message ||
+      !/^[a-z].*@gmail\.com$/.test(state.email.toLowerCase())
+    ) {
       setSubmit(true);
       return false;
-    }
-    else
-    return true;
+    } else return true;
   };
-  // Initial state for all error will be false for validation
-  // const initialErrorValue = {
-  //   nameMissing: false,
-  //   emailMissing: false,
-  //   messageMissing: false,
-  //   allMissing: false, // for all input field are missing
-  //   emailInvalid: false,
-  // };
 
   // The reducer method used to handle states of three input element name, email and message.
   const stateReducer = (state, action) => {
@@ -56,6 +72,8 @@ export function Detail() {
         return { ...state, email: action.payload };
       case "message":
         return { ...state, message: action.payload };
+      case "reset":
+        return initialvalue ;
       default:
         return state;
     }
@@ -84,24 +102,6 @@ export function Detail() {
   //   initialErrorValue
   // );
 
-  // Before submitting the form we are checking all the inputs are valid or not.
-  // const formValidation = (e) => {
-  //   e.preventDefault();
-  //   if (!state.name && !state.email && !state.message) {
-  //     dispatchValidation({ type: "allMissing", payload: true });
-  //   } else if (!state.name || !state.email || !state.message) {
-  //     if (!state.name) {
-  //       dispatchValidation({ type: "nameMissing", payload: true });
-  //     } else if (!state.email) {
-  //       dispatchValidation({ type: "emailMissing", payload: true });
-  //     } else {
-  //       dispatchValidation({ type: "messageMissing", payload: true });
-  //     }
-  //   } else if (!state.email.endsWith("@gmail.com")) {
-  //     dispatchValidation({ type: "emailInvalid", payload: true });
-  //   }
-  // };
-
   return (
     <section className="text-gray-600 body-font relative">
       <div className="container px-5 py-24 mx-auto">
@@ -114,7 +114,11 @@ export function Detail() {
             information below. Then, tap or click "Send Question" to contact us.
           </p>
         </div>
-        <form onSubmit={(e)=>{handleSubmit(e)}}>
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+        >
           <div className="lg:w-1/2 md:w-2/3 mx-auto">
             <div className="flex flex-wrap -m-2">
               <div className="p-2 w-1/2">
@@ -129,8 +133,8 @@ export function Detail() {
                     }}
                     value={state.name}
                     placeholder="John markrem"
-                    error={(!state.name && submit) && submit}
-                    helperText={(!state.name && submit)?"Enter Name":""}
+                    error={!state.name && submit && submit}
+                    helperText={!state.name && submit ? "Enter Name" : ""}
                   />
                 </div>
               </div>
@@ -146,8 +150,20 @@ export function Detail() {
                     }}
                     value={state.email}
                     placeholder="John@gmail.com"
-                    error={(!state.email && submit) ? true:((state.email && submit)?true:"")}
-                    helperText={(!state.email && submit)?"Enter Email":((state.email && submit) ? "Invalid Email":"")}
+                    error={
+                      !state.email && submit
+                        ? true
+                        : state.email && submit
+                        ? true
+                        : ""
+                    }
+                    helperText={
+                      !state.email && submit
+                        ? "Enter Email"
+                        : state.email && submit
+                        ? "Invalid Email"
+                        : ""
+                    }
                   />
                 </div>
               </div>
@@ -165,8 +181,8 @@ export function Detail() {
                     }}
                     value={state.message}
                     placeholder="Enter our concern here."
-                    error={(!state.message && submit) && submit}
-                    helperText={(!state.message && submit)?"Enter Message":""}
+                    error={!state.message && submit && submit}
+                    helperText={!state.message && submit ? "Enter Message" : ""}
                   />
                 </div>
               </div>
