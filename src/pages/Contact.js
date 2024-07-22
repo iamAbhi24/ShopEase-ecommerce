@@ -4,10 +4,8 @@ import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
-import Fade from "@mui/material/Fade";
 import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
-import Box from "@mui/material/Box";
+import Snackbar from "@mui/material/Snackbar";
 
 function Contact() {
   return (
@@ -33,6 +31,7 @@ export function Detail() {
   const [submit, setSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [error,setError]=useState(false);
   // Before submitting the form we are checking all the inputs are valid or not.
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,14 +43,14 @@ export function Detail() {
         email: state.email,
       };
       emailjs
-        .send("service_uy5112s", "contact_form", emailParams, {
+        .send("service_uy5112s", "contact_form", emailParams,{
           publicKey: "ZTlmKDsuZ4Q7d4b3s",
         })
         .then((response) => {
           setChecked(true);
         })
         .catch((error) => {
-          alert(error);
+          setError(true);
         })
         .finally(() => {
           dispatch({ type: "reset" });
@@ -59,6 +58,7 @@ export function Detail() {
           setIsLoading(false);
           setTimeout(() => {
             setChecked(false);
+            setError(false);
           }, 2000);
         });
     }
@@ -98,14 +98,6 @@ export function Detail() {
   return (
     <section className="text-gray-600 body-font relative">
       <div className="container px-5 py-24 mx-auto ">
-        <Box sx={{ width: "20%", mx: "auto"}}>
-          <Fade in={checked}>
-            <Alert severity="success">
-              <AlertTitle>Success</AlertTitle>
-              Email successfully sent!
-            </Alert>
-          </Fade>
-        </Box>
         <div className="flex flex-col text-center w-full mb-12">
           <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
             Contact Us
@@ -128,6 +120,7 @@ export function Detail() {
                     id="outlined-basic"
                     label="Name"
                     variant="outlined"
+                   autoComplete="off"
                     fullWidth
                     onChange={(e) => {
                       dispatch({ type: "name", payload: e.target.value });
@@ -143,8 +136,9 @@ export function Detail() {
                 <div className="relative">
                   <TextField
                     id="outlined-basic"
-                    label={"Email"}
+                    label="Email"
                     variant="outlined"
+                    autoComplete="off"
                     fullWidth
                     onChange={(e) => {
                       dispatch({ type: "email", payload: e.target.value });
@@ -201,6 +195,30 @@ export function Detail() {
                   Send Question
                 </button>
                 {isLoading && <CircularProgress color="inherit" />}
+                <Snackbar
+                  open={checked}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                  <Alert
+                    severity="success"
+                    variant="filled"
+                    sx={{ width: "100%" }}
+                  >
+                    Email successfully sent!
+                  </Alert>
+                </Snackbar>
+                <Snackbar
+                  open={error}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                  <Alert
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: "100%" }}
+                  >
+                   Error, please try again later
+                  </Alert>
+                </Snackbar>
               </div>
             </div>
           </div>
