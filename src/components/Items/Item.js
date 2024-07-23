@@ -1,7 +1,15 @@
 import React from "react";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Item({ item }) {
+
+function Item({ item,id }) {
+// navigate has been crated  to navigate to Itemdetails page
+  const navigate=useNavigate();
+  const handleNavigate=(itemId)=>{
+        navigate(`/products/${itemId}`);
+  }
+
   // this href will refer h2 element 
    const href=useRef(null);
   
@@ -16,7 +24,7 @@ function Item({ item }) {
   }
 
   return (
-        <div className="md:py-4 w-full cursor-pointer mt-4 mb-4 border " onMouseOver={hoverIn} onMouseLeave={hoverOut} >
+        <div className="md:py-4 w-full cursor-pointer mt-4 mb-4 border " onMouseOver={hoverIn} onMouseLeave={hoverOut} onClick={()=>{handleNavigate(id)}}>
           <a className="block relative h-48  rounded overflow-hidden">
             <img
               alt="ecommerce"

@@ -28,34 +28,36 @@ export function Detail() {
     message: "",
   };
 
-  const [submit, setSubmit] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [checked, setChecked] = useState(false);
-  const [error,setError]=useState(false);
+  const [submit, setSubmit] = useState(false); //For send question button
+  const [isLoading, setIsLoading] = useState(false); // For loader, when we click send question button
+  const [checked, setChecked] = useState(false); // For success alert snackbar when email gets successfully sent
+  const [error, setError] = useState(false); // For error alert snackbar when  error occured while sending email
   // Before submitting the form we are checking all the inputs are valid or not.
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); //stoping the form to get submitted
     if (formValidation()) {
       const emailParams = {
-        subject: "concern",
+        subject: "Concern",
         name: state.name,
         message: state.message,
         email: state.email,
       };
+      // service_uy5112s is service key, contact_form is emailJs template name, emailParams is all parameters
       emailjs
-        .send("service_uy5112s", "contact_form", emailParams,{
+        .send("service_uy5112s", "contact_form", emailParams, {
           publicKey: "ZTlmKDsuZ4Q7d4b3s",
         })
         .then((response) => {
-          setChecked(true);
+          setChecked(true); //email successfuly sent and success alert will get visible
         })
         .catch((error) => {
-          setError(true);
+          setError(true); // error occured while sending email and error alert will get visible
         })
         .finally(() => {
-          dispatch({ type: "reset" });
+          dispatch({ type: "reset" }); // reset all input filed to empty
           setSubmit(false);
           setIsLoading(false);
+          // both alert snacbar will get disappear after 2 seconds
           setTimeout(() => {
             setChecked(false);
             setError(false);
@@ -63,6 +65,7 @@ export function Detail() {
         });
     }
   };
+  //Validating the form
   const formValidation = () => {
     if (
       !state.name ||
@@ -91,8 +94,7 @@ export function Detail() {
         return state;
     }
   };
-  // Below Reducer function is getting use for seeting state for error input filed in Validation
-
+  // will hold input object
   const [state, dispatch] = useReducer(stateReducer, initialvalue);
 
   return (
@@ -120,15 +122,15 @@ export function Detail() {
                     id="outlined-basic"
                     label="Name"
                     variant="outlined"
-                   autoComplete="off"
+                    autoComplete="off" //autosuggession is off
                     fullWidth
                     onChange={(e) => {
                       dispatch({ type: "name", payload: e.target.value });
                     }}
                     value={state.name}
                     placeholder="John markrem"
-                    error={!state.name && submit && submit}
-                    helperText={!state.name && submit ? "Enter Name" : ""}
+                    error={!state.name && submit && submit} //this prop will be true if name  field kept empty and we have hit the sned question btn
+                    helperText={!state.name && submit ? "Enter Name" : ""} //this text will be visible when we  hit the sned question btn and  the field is empty
                   />
                 </div>
               </div>
@@ -146,6 +148,7 @@ export function Detail() {
                     value={state.email}
                     placeholder="John@gmail.com"
                     error={
+                      // It will get true when either email field is empty or the input is not matching with this specified pattern
                       !state.email && submit
                         ? true
                         : !/^[a-z].*@gmail\.com$/.test(
@@ -155,6 +158,7 @@ export function Detail() {
                         : false
                     }
                     helperText={
+                      // It will get visible when either email field is empty or the input is not matching with this specified pattern
                       !state.email && submit
                         ? "Enter Email"
                         : !/^[a-z].*@gmail\.com$/.test(
@@ -180,8 +184,8 @@ export function Detail() {
                     }}
                     value={state.message}
                     placeholder="Enter our concern here."
-                    error={!state.message && submit && submit}
-                    helperText={!state.message && submit ? "Enter Message" : ""}
+                    error={!state.message && submit && submit} //this prop will be true if name  field kept empty and we have hit the sned question btn
+                    helperText={!state.message && submit ? "Enter Message" : ""} //this text will be visible when we  hit the sned question btn and  the field is empty
                   />
                 </div>
               </div>
@@ -195,9 +199,10 @@ export function Detail() {
                   Send Question
                 </button>
                 {isLoading && <CircularProgress color="inherit" />}
+                {/* below snackbar for success alert */}
                 <Snackbar
                   open={checked}
-                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 >
                   <Alert
                     severity="success"
@@ -207,16 +212,17 @@ export function Detail() {
                     Email successfully sent!
                   </Alert>
                 </Snackbar>
+                {/* below snacbar for error alert */}
                 <Snackbar
                   open={error}
-                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 >
                   <Alert
                     severity="error"
                     variant="filled"
                     sx={{ width: "100%" }}
                   >
-                   Error, please try again later
+                    Error, please try again later
                   </Alert>
                 </Snackbar>
               </div>
