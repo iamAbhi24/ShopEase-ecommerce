@@ -27,7 +27,7 @@ function Main() {
           </p>
           <button className="bg-blue-500 text-sm p-1 border rounded cursor-pointer my-2 hover:bg-blue-300">
             <NavLink to="/products">Shop Now!</NavLink>
-          </button>
+          </button> 
         </div>
 
         <img

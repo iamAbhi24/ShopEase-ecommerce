@@ -5,7 +5,7 @@ import Items from "../components/Items/Items";
 
 
 function Products() {
-  const api="https://dummyjson.com/products" ;
+  const api="https://dummyjson.com/products";
   return (
     <div>
       <NavBar />

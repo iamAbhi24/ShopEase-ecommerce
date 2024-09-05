@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-function Item({ item,id }) {
+function Item({ item,itemId }) {
 // navigate has been crated  to navigate to Itemdetails page
   const navigate=useNavigate();
   const handleNavigate=(itemId)=>{
@@ -24,7 +24,7 @@ function Item({ item,id }) {
   }
 
   return (
-        <div className="md:py-4 w-full cursor-pointer mt-4 mb-4 border " onMouseOver={hoverIn} onMouseLeave={hoverOut} onClick={()=>{handleNavigate(id)}}>
+        <div className="md:py-4 w-full cursor-pointer mt-4 mb-4 border " onMouseOver={hoverIn} onMouseLeave={hoverOut} onClick={()=>{handleNavigate(itemId)}}>
           <a className="block relative h-48  rounded overflow-hidden">
             <img
               alt="ecommerce"

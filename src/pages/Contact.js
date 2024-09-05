@@ -71,7 +71,7 @@ export function Detail() {
       !state.name ||
       !state.email ||
       !state.message ||
-      !/^[a-z].*@gmail\.com$/.test(state.email.toLowerCase())
+      !/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(state.email.toLowerCase())
     ) {
       setSubmit(true);
       setIsLoading(false);

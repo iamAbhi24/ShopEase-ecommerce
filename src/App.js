@@ -19,7 +19,7 @@ function App() {
           <Route path="/products/:id" element={<Itemdetails/>} /> 
           <Route path="*" element={<Notfound />} />
         </Routes>
-      </Router>
+      </Router>  
     </div>
   );
 }
