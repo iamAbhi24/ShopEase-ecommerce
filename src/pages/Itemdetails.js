@@ -5,7 +5,8 @@ import "./Itemdetails.css";
 import { useParams } from "react-router-dom";
 import UseFetch from "../Hooks/UseFetch";
 import Alert from "@mui/material/Alert";
-import Snackbar from "@mui/material/Snackbar";function Itemdetails() {
+import Snackbar from "@mui/material/Snackbar";
+function Itemdetails() {
   // Fetching id of individual item
   let { id } = useParams();
   // Getting data from a custom hook useFetch under Hooks folder
@@ -35,37 +36,36 @@ export default Itemdetails;
 
 export function Details({ item }) {
   //state to track whether the item is in the wishlist
-  const [isWishlist,setIsWishlist] = useState(false);
-  
+  const [isWishlist, setIsWishlist] = useState(false);
+
   // state to manage the visibility of add and remove wishlist snackbar
-  const[wishlistsnackbarOpen,setWishListSnackbarOpen]=useState(false);
-  const[removedsnackbarOpen,setRemovedSnackbarOpen]=useState(false);
+  const [wishlistsnackbarOpen, setWishListSnackbarOpen] = useState(false);
+  const [removedsnackbarOpen, setRemovedSnackbarOpen] = useState(false);
 
   //handle wishlist toggle
-  const handleWishlist=()=>{
-     if(isWishlist){
+  const handleWishlist = () => {
+    if (isWishlist) {
       setIsWishlist(false);
       setRemovedSnackbarOpen(true);
-     }
-     else{
+    } else {
       setIsWishlist(true);
       setWishListSnackbarOpen(true);
-     }
-  }
-  
+    }
+  };
+
   // close hanlers for both snackbar
-  const handleWishlistSnackbarOpenClose=()=>{
+  const handleWishlistSnackbarOpenClose = () => {
     setWishListSnackbarOpen(false);
-  }
-  
-  const handleRemovedsnackbarOpenClose=()=>{
+  };
+
+  const handleRemovedsnackbarOpenClose = () => {
     setRemovedSnackbarOpen(false);
-  }
+  };
 
   return (
     <div>
       <section class="text-gray-600 body-font overflow-hidden">
-        <div class="container px-5 py-10 sm:py-24 mx-auto sticky" >
+        <div class="container px-5 py-10 sm:py-24 mx-auto sticky">
           <div
             class="lg:w-4/5 mx-auto flex flex-wrap relative"
             onDoubleClick={handleWishlist}
@@ -91,9 +91,7 @@ export function Details({ item }) {
 
             <button
               className={`sm:hidden absolute inline-flex right-2 top-6 rounded-full w-14 h-14 bg-gray-200 p-0 border-0  items-center justify-center text-gray-500 ml-4 transition-transform-colors duration-100 ease-in-out delay-100 ${
-                isWishlist
-                  ? "bg-red-600 transform scale-110"
-                  : " text-gray-500"
+                isWishlist ? "bg-red-600 transform scale-110" : " text-gray-500"
               } }`}
               onClick={handleWishlist}
             >
@@ -125,7 +123,7 @@ export function Details({ item }) {
                 <span class="title-font font-bold text-3xl sm:text-2xl text-gray-900">
                   ₹{Math.floor(item.price * 85)}
                 </span>
-                <div className="mobile-fixed-bottom sm:py-4 sm:flex sm:my-6">
+                <div className="mobile-fixed-bottom sm:py-4 sm:flex sm:my-6 relative">
                   <button class="flex mobile-fixed-button text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded">
                     ADD TO CART
                   </button>
@@ -152,35 +150,49 @@ export function Details({ item }) {
                     </svg>
                   </button>
                   {/* snackar for adding adding to wishlist */}
-                 <Snackbar
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  autoHideDuration={3000}
-                  open={wishlistsnackbarOpen}
-                  onClose={handleWishlistSnackbarOpenClose}
-                 >
-                  <Alert
-                    severity="success"
-                    variant="filled"
-                    sx={{ width: "100%" }}
+                  <Snackbar
+                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                    autoHideDuration={2000}
+                    open={wishlistsnackbarOpen}
+                    onClose={handleWishlistSnackbarOpenClose}
                   >
-                    Added to wishlist
-                  </Alert>
-                </Snackbar>
-                {/* snackbar for removing from wishlist */}
-                 <Snackbar
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  autoHideDuration={3000}
-                  open={removedsnackbarOpen}
-                  onClose={handleRemovedsnackbarOpenClose}
-                 >
-                  <Alert
-                    severity="success"
-                    variant="filled"
-                    sx={{ width: "100%" }}
+                    <Alert
+                      severity="success"
+                      variant="filled"
+                      sx={{
+                        width: "100%",
+                        backgroundColor: "#DC143C",
+                        color: "white",
+                        position:"absolute",
+                        top:"75vh",
+                        fontWeight:"bold"
+                      }}
+                    >
+                      Added to wishlist
+                    </Alert>
+                  </Snackbar>
+                  {/* snackbar for removing from wishlist */}
+                  <Snackbar
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                    autoHideDuration={2000}
+                    open={removedsnackbarOpen}
+                    onClose={handleRemovedsnackbarOpenClose}
                   >
-                    Removed from wishlist
-                  </Alert>
-                </Snackbar>
+                    <Alert
+                      severity="success"
+                      variant="filled"
+                      sx={{
+                        width: "100%",
+                        backgroundColor: "#424242",
+                        color: "black",
+                        position:"absolute",
+                        bottom:"10vh",
+                        fontWeight:"bold"
+                      }}
+                    >
+                      Removed from wishlist
+                    </Alert>
+                  </Snackbar>
                 </div>
               </div>
             </div>
