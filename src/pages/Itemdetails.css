@@ -1,0 +1,27 @@
+@media screen and (max-width: 640px){
+    .mobile-fixed-bottom{
+        display: flex;
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        width:100%;
+        justify-items: center;
+        justify-content: center;
+    }
+
+    .mobile-fixed-button{
+       width:50%;
+       padding:1rem 0;
+       border: 1px solid black;
+       align-items: center;
+       justify-content: center;
+    }
+
+    .mobile-wish-list-button-hide{
+        display: none;
+    }
+
+
+}
+
+

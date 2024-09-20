@@ -28,8 +28,9 @@ function Item({ item,itemId }) {
           <a className="block relative h-48  rounded overflow-hidden">
             <img
               alt="ecommerce"
-              className="object-cover object-center w-full h-full block transform transition-transform duration-300 hover:scale-105 "
+              className="object-contain object-center w-full h-full block transform transition-transform duration-300 hover:scale-105 "
               src={item.images[0]}
+              loading="lazy"
             />
           </a>
           <div className="mt-4">
