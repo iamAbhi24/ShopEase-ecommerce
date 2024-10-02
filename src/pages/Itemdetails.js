@@ -4,6 +4,8 @@ import Footer from "../components/Footer/Footer";
 import "./Itemdetails.css";
 import { useParams } from "react-router-dom";
 import UseFetch from "../Hooks/UseFetch";
+import { useContext } from "react";
+import WishlistContext from "../Providers/WishlistProvider";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 function Itemdetails() {
@@ -23,10 +25,11 @@ function Itemdetails() {
     return item.id === parseInt(id);
   });
 
+
   return (
     <div>
       <NavBar />
-      <Details item={products} />
+      <Details item={products} id={id}/>
       <Footer />
     </div>
   );
@@ -34,24 +37,43 @@ function Itemdetails() {
 
 export default Itemdetails;
 
-export function Details({ item }) {
+export function Details({ item,id}) {
+   
+  const itemId=parseInt(id); // id is the paramter which is by default string , need to convert it into integer  
+  
+  const {wishlist,dispatch}=useContext(WishlistContext);   
+
   //state to track whether the item is in the wishlist
-  const [isWishlist, setIsWishlist] = useState(false);
+  // const [isWishlist, setIsWishlist] = useState(false);
+
+  const isWishlist=wishlist.includes(itemId); 
 
   // state to manage the visibility of add and remove wishlist snackbar
   const [wishlistsnackbarOpen, setWishListSnackbarOpen] = useState(false);
   const [removedsnackbarOpen, setRemovedSnackbarOpen] = useState(false);
 
+   const handleWishlist=()=>{
+        if(isWishlist){
+          dispatch({type:"REMOVE_FROM_WISHLIST",itemId});
+          setRemovedSnackbarOpen(true);
+        }
+        else{
+          dispatch({type:"ADD_TO_WISHLIST",itemId});
+          setWishListSnackbarOpen(true);
+        }
+   }
+   
+
   //handle wishlist toggle
-  const handleWishlist = () => {
-    if (isWishlist) {
-      setIsWishlist(false);
-      setRemovedSnackbarOpen(true);
-    } else {
-      setIsWishlist(true);
-      setWishListSnackbarOpen(true);
-    }
-  };
+  // const handleWishlist = () => {
+  //   if (isWishlist) {
+  //     setIsWishlist(false);
+  //     setRemovedSnackbarOpen(true);
+  //   } else {
+  //     setIsWishlist(true);
+  //     setWishListSnackbarOpen(true);
+  //   }
+  // };
 
   // close hanlers for both snackbar
   const handleWishlistSnackbarOpenClose = () => {
@@ -92,7 +114,7 @@ export function Details({ item }) {
             <button
               className={`sm:hidden absolute inline-flex right-2 top-6 rounded-full w-14 h-14 bg-gray-200 p-0 border-0  items-center justify-center text-gray-500 ml-4 transition-transform-colors duration-100 ease-in-out delay-100 ${
                 isWishlist ? "bg-red-600 transform scale-110" : " text-gray-500"
-              } }`}
+              }`}
               onClick={handleWishlist}
             >
               <svg
@@ -119,11 +141,11 @@ export function Details({ item }) {
                 {item.title}
               </h1>
               <p class="leading-relaxed my-2">{item.description}</p>
-              <div class="sm:flex sm:justify-between sm:my-20 ">
+              <div class="sm:flex sm:justify-between sm:my-20">
                 <span class="title-font font-bold text-3xl sm:text-2xl text-gray-900">
                   ₹{Math.floor(item.price * 85)}
                 </span>
-                <div className="mobile-fixed-bottom sm:py-4 sm:flex sm:my-6 relative">
+                <div className="mobile-fixed-bottom sm:py-4 sm:flex sm:my-6">
                   <button class="flex mobile-fixed-button text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded">
                     ADD TO CART
                   </button>
@@ -163,8 +185,6 @@ export function Details({ item }) {
                         width: "100%",
                         backgroundColor: "#DC143C",
                         color: "white",
-                        position:"absolute",
-                        top:"75vh",
                         fontWeight:"bold"
                       }}
                     >
@@ -173,7 +193,7 @@ export function Details({ item }) {
                   </Snackbar>
                   {/* snackbar for removing from wishlist */}
                   <Snackbar
-                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
                     autoHideDuration={2000}
                     open={removedsnackbarOpen}
                     onClose={handleRemovedsnackbarOpenClose}
@@ -185,8 +205,6 @@ export function Details({ item }) {
                         width: "100%",
                         backgroundColor: "#424242",
                         color: "black",
-                        position:"absolute",
-                        bottom:"10vh",
                         fontWeight:"bold"
                       }}
                     >

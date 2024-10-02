@@ -6,20 +6,35 @@ import Contact from "./pages/Contact";
 import Notfound from "./pages/Notfound";
 import Itemdetails from "./pages/Itemdetails";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {WishlistProvider} from "./Providers/WishlistProvider";
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/"  element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/products" element={<Products />} />
+          <Route
+            path="/products"
+            element={
+              <WishlistProvider>
+                <Products />
+              </WishlistProvider>
+            }
+          />
+          <Route
+            path="/products/:id"
+            element={
+              <WishlistProvider>
+                <Itemdetails />
+              </WishlistProvider>
+            }
+          />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/products/:id" element={<Itemdetails/>} /> 
           <Route path="*" element={<Notfound />} />
         </Routes>
-      </Router>  
+      </Router>
     </div>
   );
 }

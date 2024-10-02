@@ -95,7 +95,7 @@ export function Detail() {
     }
   };
   // will hold input object
-  const [state, dispatch] = useReducer(stateReducer, initialvalue);
+  const [state, dispatch] = useReducer(stateReducer, initialvalue);   
 
   return (
     <section className="text-gray-600 body-font relative">

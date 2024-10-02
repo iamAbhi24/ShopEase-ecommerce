@@ -9,10 +9,10 @@ function Items({api}) {
 
   // eslint-disable-next-line
   // getting data from a custom hook useFetch under Hooks folder
-  const [data, error, loading] = UseFetch(api); 
+  const [data, error, loading] = UseFetch(api);
 
   // it will display when error occur while fetching data
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>Error: {error}</div>; 
 
   return (
     <div>
@@ -28,7 +28,7 @@ function Items({api}) {
              <Item key={item.id} itemId={item.id} item={item}/>
               :
               <div>
-               <Skeleton variant="rectangular" height={220} width={300} />
+               <Skeleton variant="rectangular" height={220} width={300}  />
                <Skeleton variant="text" />
                <Skeleton variant="text" />
                </div>
