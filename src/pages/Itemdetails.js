@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import "./Itemdetails.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UseFetch from "../Hooks/UseFetch";
 import { useContext } from "react";
 import WishlistContext from "../Providers/WishlistProvider";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 function Itemdetails() {
   // Fetching id of individual item
   let { id } = useParams();
@@ -42,9 +44,14 @@ export function Details({ item,id}) {
   const itemId=parseInt(id); // id is the paramter which is by default string , need to convert it into integer  
   
   const {wishlist,dispatch}=useContext(WishlistContext);   
+  
+  const [addToCart,setAddToCart]=useState(false);
+  const [cart,setCart]=useState([]);   
 
-  //state to track whether the item is in the wishlist
-  // const [isWishlist, setIsWishlist] = useState(false);
+  const navigate=useNavigate();
+  
+
+
 
   const isWishlist=wishlist.includes(itemId); 
 
@@ -62,18 +69,19 @@ export function Details({ item,id}) {
           setWishListSnackbarOpen(true);
         }
    }
-   
 
-  //handle wishlist toggle
-  // const handleWishlist = () => {
-  //   if (isWishlist) {
-  //     setIsWishlist(false);
-  //     setRemovedSnackbarOpen(true);
-  //   } else {
-  //     setIsWishlist(true);
-  //     setWishListSnackbarOpen(true);
-  //   }
-  // };
+   localStorage.setItem('products',JSON.stringify(cart));    
+   const handleCart=()=>{
+       if(!addToCart){
+        setAddToCart(true); 
+        const updatedItem=[...cart,item];
+        setCart(updatedItem);
+       }
+      else
+      navigate('/shopease/checkout/cart');
+   }
+
+
 
   // close hanlers for both snackbar
   const handleWishlistSnackbarOpenClose = () => {
@@ -90,7 +98,6 @@ export function Details({ item,id}) {
         <div class="container px-5 py-10 sm:py-24 mx-auto sticky">
           <div
             class="lg:w-4/5 mx-auto flex flex-wrap relative"
-            onDoubleClick={handleWishlist}
           >
             <button class="sm:hidden absolute inline-flex right-2 top-24 rounded-full w-14 h-14 bg-gray-200 p-0 border-0  items-center justify-center text-gray-500 ml-4 ">
               <svg
@@ -132,6 +139,7 @@ export function Details({ item,id}) {
               alt="ecommerce"
               class="lg:w-1/2 w-full lg:h-auto h-64 object-contain object-center rounded"
               src={item.images}
+              onDoubleClick={handleWishlist}
             />
             <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-10 lg:mt-0 select-none">
               <h2 class="text-sm title-font text-gray-500 tracking-widest">
@@ -146,10 +154,15 @@ export function Details({ item,id}) {
                   ₹{Math.floor(item.price * 85)}
                 </span>
                 <div className="mobile-fixed-bottom sm:py-4 sm:flex sm:my-6">
-                  <button class="flex mobile-fixed-button text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded">
-                    ADD TO CART
+              {addToCart ? <button class="flex mobile-fixed-button text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded" onClick={handleCart}>
+                    GO TO BAG  <ArrowForwardIcon />
                   </button>
-                  <button class="flex mobile-fixed-button sm:ml-2 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded">
+                  :
+                  <button class="flex mobile-fixed-button text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded" onClick={handleCart}>
+                  ADD TO CART
+                  </button>
+                }
+                  <button class="flex mobile-fixed-button sm:ml-2 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded" onClick={()=>{navigate('/shopease/checkout/cart')}}>
                     BUY NOW
                   </button>
                   <button
