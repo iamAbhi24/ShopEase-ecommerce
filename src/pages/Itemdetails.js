@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import "./Itemdetails.css";
@@ -26,8 +26,6 @@ function Itemdetails() {
   const products = items.products.find((item) => {
     return item.id === parseInt(id);
   });
-
-
   return (
     <div>
       <NavBar />
@@ -37,22 +35,20 @@ function Itemdetails() {
   );
 }
 
-export default Itemdetails;
+export default Itemdetails;  
 
-export function Details({ item,id}) {
+export function Details({ item,id}) { 
    
   const itemId=parseInt(id); // id is the paramter which is by default string , need to convert it into integer  
   
   const {wishlist,dispatch}=useContext(WishlistContext);   
   
-  const [addToCart,setAddToCart]=useState(false);
-  const [cart,setCart]=useState([]);   
+  const [addToCart,setAddToCart]=useState(false); 
+  const cart=JSON.parse(localStorage.getItem('products')) || [];       
+  const existingCartItems=cart.find((cartItem)=> {return cartItem.id === item.id}); 
 
-  const navigate=useNavigate();
+  const navigate=useNavigate(); 
   
-
-
-
   const isWishlist=wishlist.includes(itemId); 
 
   // state to manage the visibility of add and remove wishlist snackbar
@@ -70,18 +66,24 @@ export function Details({ item,id}) {
         }
    }
 
-   localStorage.setItem('products',JSON.stringify(cart));    
+  //  localStorage.setItem('products',JSON.stringify(cart)); 
+  //  localStorage.removeItem('products');  
+      
    const handleCart=()=>{
-       if(!addToCart){
-        setAddToCart(true); 
-        const updatedItem=[...cart,item];
-        setCart(updatedItem);
-       }
-      else
+       if(!addToCart && !existingCartItems){
+          setAddToCart(true); 
+          localStorage.setItem('products',JSON.stringify([...cart,item]))
+        }
+      else  
       navigate('/shopease/checkout/cart');
-   }
+   } 
 
-
+   const handleBuy=()=>{
+        if(!existingCartItems){
+          localStorage.setItem('products',JSON.stringify([...cart,item]));
+        }
+       navigate('/shopease/checkout/cart');
+  }
 
   // close hanlers for both snackbar
   const handleWishlistSnackbarOpenClose = () => {
@@ -154,17 +156,17 @@ export function Details({ item,id}) {
                   ₹{Math.floor(item.price * 85)}
                 </span>
                 <div className="mobile-fixed-bottom sm:py-4 sm:flex sm:my-6">
-              {addToCart ? <button class="flex mobile-fixed-button text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded" onClick={handleCart}>
+              {addToCart || existingCartItems ? <button class="flex mobile-fixed-button text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded" onClick={handleCart}>
                     GO TO BAG  <ArrowForwardIcon />
                   </button>
                   :
                   <button class="flex mobile-fixed-button text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded" onClick={handleCart}>
                   ADD TO CART
                   </button>
-                }
-                  <button class="flex mobile-fixed-button sm:ml-2 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded" onClick={()=>{navigate('/shopease/checkout/cart')}}>
+                }   
+                  <button class="flex mobile-fixed-button sm:ml-2 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 sm:rounded" onClick={handleBuy}>
                     BUY NOW
-                  </button>
+                  </button>   
                   <button
                     class={`mobile-wish-list-button-hide rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4 transition-transform-colors duration-100 ease-in-out delay-100 ${
                       isWishlist
@@ -233,3 +235,4 @@ export function Details({ item,id}) {
     </div>
   );
 }
+  
